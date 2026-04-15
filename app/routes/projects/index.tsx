@@ -1,4 +1,4 @@
-import type { Project } from "~/types";
+import type { Project, StrapiProject, StrapiResponse } from "~/types";
 import type { Route } from "./+types/index";
 import ProjectCard from "~/components/ProjectCard";
 import { useState } from "react";
@@ -15,9 +15,24 @@ export function meta({}: Route.MetaArgs) {
 export async function loader({
   request,
 }: Route.LoaderArgs): Promise<{ projects: Project[] }> {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/projects`);
-  const data = await res.json();
-  return { projects: data };
+  const url = `${import.meta.env.VITE_API_URL}/projects?populate=*`;
+  console.log(url);
+  const res = await fetch(url);
+  const json: StrapiResponse<StrapiProject> = await res.json();
+  console.log(json);
+  const projects = json.data.map((item) => ({
+    id: item.id,
+    documentId: item.documentId,
+    title: item.title,
+    description: item.description,
+    image: item.image?.url ? `${item.image.url}` : "/images/no-image.png",
+    url: item.url,
+    category: item.category,
+    date: item.date,
+    featured: item.featured,
+  }));
+
+  return { projects };
 }
 
 const ProjectsPage = ({ loaderData }: Route.ComponentProps) => {

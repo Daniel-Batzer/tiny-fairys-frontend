@@ -1,6 +1,6 @@
 import FeaturedProjects from "~/components/FeaturedProjects";
 import type { Route } from "./+types/index";
-import type { Project } from "~/types";
+import type { Project, StrapiProject, StrapiResponse } from "~/types";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -12,9 +12,27 @@ export function meta({}: Route.MetaArgs) {
 export async function loader({
   request,
 }: Route.LoaderArgs): Promise<{ projects: Project[] }> {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/projects`);
-  const data = await res.json();
-  return { projects: data };
+  const res = await fetch(
+    `${import.meta.env.VITE_API_URL}/projects?filters[featured][$eq]=true&populate=*`,
+  );
+  if (!res.ok) {
+    throw new Error("Failed to fetch featured projects");
+  }
+
+  const projectJson: StrapiResponse<StrapiProject> = await res.json();
+  const projects = projectJson.data.map((item) => ({
+    id: item.id,
+    documentId: item.documentId,
+    title: item.title,
+    description: item.description,
+    image: item.image?.url ? `${item.image.url}` : "/images/no-image.png",
+    url: item.url,
+    category: item.category,
+    date: item.date,
+    featured: item.featured,
+  }));
+
+  return { projects };
 }
 
 const HomePage = ({ loaderData }: Route.ComponentProps) => {
