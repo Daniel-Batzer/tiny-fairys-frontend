@@ -16,10 +16,8 @@ export async function loader({
   request,
 }: Route.LoaderArgs): Promise<{ projects: Project[] }> {
   const url = `${import.meta.env.VITE_API_URL}/projects?populate=*`;
-  console.log(url);
   const res = await fetch(url);
   const json: StrapiResponse<StrapiProject> = await res.json();
-  console.log(json);
   const projects = json.data.map((item) => ({
     id: item.id,
     documentId: item.documentId,
