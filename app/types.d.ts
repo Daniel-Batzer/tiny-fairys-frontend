@@ -17,7 +17,22 @@ export type Fairy = {
   title: string;
   description: string;
   hp: number;
+  type: ElementType;
   features: Features[];
+};
+
+export type Spell = {
+  id: number;
+  documentId: string;
+  image: string;
+  title: string;
+  type: ElementType;
+  description: string;
+  normal: string;
+  expert: string;
+  special: string;
+  master: string;
+  legend: string;
 };
 
 export type Features = {
@@ -28,6 +43,10 @@ export type Features = {
 
 export type StrapiResponse<T> = {
   data: T[];
+};
+
+export type StrapiSingleResponse<T> = {
+  data: T;
 };
 
 export type StrapiImage = {
@@ -82,6 +101,13 @@ export type StrapiFairy = {
   title: string;
   description: string;
   hp: number;
+  type: ElementType;
   features: Features[];
   image?: StrapiImage;
 };
+
+export type StrapiSpell = Omit<Spell, "image"> & {
+  image?: StrapiImage;
+};
+
+export type ElementType = "fire" | "water" | "earth" | "air";

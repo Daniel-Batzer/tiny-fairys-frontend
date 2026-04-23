@@ -16,6 +16,7 @@ export const mapStrapiFairyToFairy = (
   description: item.description,
   hp: item.hp,
   features: item.features,
+  type: item.type,
   image: toImageUrl(
     baseUrl,
     item.image?.formats?.medium?.url ??

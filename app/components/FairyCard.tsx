@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import type { Fairy } from "~/types";
 
 type FairyCardProps = {
@@ -11,8 +12,11 @@ const truncateText = (text: string, maxLength = 120) => {
 
 const FairyCard = ({ fairy }: FairyCardProps) => {
   return (
-    <article className="flex h-64 overflow-hidden rounded-xl bg-gray-800 shadow-md transition hover:scale-[1.01]">
-      <div className="h-full aspect-[3/4] shrink-0 overflow-hidden rounded-l-xl bg-gray-900">
+    <Link
+      to={`/fairies/${fairy.documentId}`}
+      className="flex h-64 overflow-hidden rounded-xl bg-gray-800 shadow-md transition hover:scale-[1.01]"
+    >
+      <div className="h-full aspect-3/4 shrink-0 overflow-hidden rounded-l-xl bg-gray-900">
         <img
           src={fairy.image}
           alt={fairy.title}
@@ -46,7 +50,7 @@ const FairyCard = ({ fairy }: FairyCardProps) => {
           ))}
         </div>
       </div>
-    </article>
+    </Link>
   );
 };
 

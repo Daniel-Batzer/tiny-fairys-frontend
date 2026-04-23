@@ -1,5 +1,5 @@
 import { NavLink } from "react-router";
-import { FaLaptopCode, FaTimes, FaBars } from "react-icons/fa";
+import { FaTimes, FaBars, FaDice } from "react-icons/fa";
 import { useState } from "react";
 
 const Navbar = () => {
@@ -15,8 +15,8 @@ const Navbar = () => {
           to="/"
           className="flex items-center gap-2 text-lg font-bold text-blue-300"
         >
-          <FaLaptopCode className="text-blue-400 text-xl" />
-          <span>The Friendly Developer</span>
+          <FaDice className="text-blue-400 text-xl" />
+          <span>Tiny-D6-Fairies</span>
         </NavLink>
 
         {/* Desk Nav */}
@@ -34,18 +34,7 @@ const Navbar = () => {
             >
               Projects
             </NavLink>
-            <NavLink
-              className={({ isActive }) => (isActive ? active : base)}
-              to="/blog"
-            >
-              Blog
-            </NavLink>
-            <NavLink
-              className={({ isActive }) => (isActive ? active : base)}
-              to="/about"
-            >
-              About
-            </NavLink>
+
             <NavLink
               className={({ isActive }) => (isActive ? active : base)}
               to="/fairies"
