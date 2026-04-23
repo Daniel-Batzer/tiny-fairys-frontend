@@ -13,6 +13,8 @@ export default [
     route("projects/:id", "./routes/projects/details.tsx"),
     route("fairies", "./routes/fairys/index.tsx"),
     route("fairies/:id", "./routes/fairys/details.tsx"),
+    route("features", "./routes/features/index.tsx"),
+    route("spells", "./routes/spells/index.tsx"),
     route("*", "./routes/errors/not-found.tsx"),
   ]),
 ] satisfies RouteConfig;

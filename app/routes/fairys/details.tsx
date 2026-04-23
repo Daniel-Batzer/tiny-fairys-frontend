@@ -1,7 +1,8 @@
-import type { Fairy, Spell, StrapiFairy, StrapiSingleResponse } from "~/types";
+import type { Fairy, Spell } from "~/types";
 import type { Route } from "./+types/details";
-import { Link, useParams } from "react-router";
+import { Link } from "react-router";
 import { mapStrapiFairyToFairy } from "~/utils/mapper/strapi-mapper";
+import { GetFairyById } from "~/utils/mapper/strapi-api";
 
 type DetailsLoaderData = {
   fairy: Fairy;
@@ -11,25 +12,20 @@ type DetailsLoaderData = {
 export async function loader({
   params,
 }: Route.LoaderArgs): Promise<DetailsLoaderData> {
-  const baseUrl = import.meta.env.VITE_API_URL;
   const fairyId = params.id;
-
   if (!fairyId) {
     throw new Response("Missing fairy id", { status: 400 });
   }
 
-  const fairyUrl = `${baseUrl}/fairies/${fairyId}?populate=*`;
-  const fairyRes = await fetch(fairyUrl);
-  if (!fairyRes.ok) {
-    throw new Response("Failed to load fairy", { status: fairyRes.status });
+  const strapiFairy = await GetFairyById(fairyId);
+
+  if (!strapiFairy) {
+    throw new Response("Fairy not found", { status: 404 });
   }
 
-  const fairyJson: StrapiSingleResponse<StrapiFairy> = await fairyRes.json();
-  const fairy = fairyJson.data;
+  const fairy = mapStrapiFairyToFairy(strapiFairy);
 
-  console.log("Loaded fairy:", fairy);
-
-  return { fairy: mapStrapiFairyToFairy(fairy, baseUrl), spells: [] };
+  return { fairy, spells: [] };
 }
 
 const FairyDetailsPage = ({ loaderData }: Route.ComponentProps) => {

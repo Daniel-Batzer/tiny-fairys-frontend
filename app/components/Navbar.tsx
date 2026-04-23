@@ -41,6 +41,18 @@ const Navbar = () => {
             >
               Fairies
             </NavLink>
+            <NavLink
+              className={({ isActive }) => (isActive ? active : base)}
+              to="/spells"
+            >
+              Spells
+            </NavLink>
+            <NavLink
+              className={({ isActive }) => (isActive ? active : base)}
+              to="/features"
+            >
+              Features
+            </NavLink>
           </div>
         </div>
 
@@ -71,20 +83,6 @@ const Navbar = () => {
             onClick={() => setMenuOpen(false)}
           >
             Projects
-          </NavLink>
-          <NavLink
-            className={({ isActive }) => (isActive ? active : base)}
-            to="/blog"
-            onClick={() => setMenuOpen(false)}
-          >
-            Blog
-          </NavLink>
-          <NavLink
-            className={({ isActive }) => (isActive ? active : base)}
-            to="/about"
-            onClick={() => setMenuOpen(false)}
-          >
-            About
           </NavLink>
           <NavLink
             className={({ isActive }) => (isActive ? active : base)}
