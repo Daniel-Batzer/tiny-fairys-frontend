@@ -1,7 +1,9 @@
 import type {
+  ElementType,
   StrapiFairy,
   StrapiResponse,
   StrapiSingleResponse,
+  StrapiSpell,
 } from "~/types";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -10,7 +12,7 @@ export async function GetStrappiResources<T>(
   path: string,
   nameOfResource: string,
 ): Promise<T[]> {
-  const url = `${BASE_URL}/${path}?populate=*`;
+  const url = `${BASE_URL}/${path}`;
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -40,9 +42,27 @@ export async function GetOneStrapiResource<T>(
 }
 
 export async function GetAllFairys() {
-  return await GetStrappiResources<StrapiFairy>("fairies", "fairies");
+  return await GetStrappiResources<StrapiFairy>(
+    "fairies?populate=*",
+    "fairies",
+  );
 }
 
 export async function GetFairyById(id: string) {
-  return await GetOneStrapiResource<StrapiFairy>("fairies", id, "fairy");
+  return await GetOneStrapiResource<StrapiFairy>(`fairies`, id, "fairy");
+}
+
+export async function GetAllSpells() {
+  return await GetStrappiResources<StrapiSpell>("spells?populate=*", "spells");
+}
+
+export async function GetSpellsByElement(element: ElementType) {
+  return await GetStrappiResources<StrapiSpell>(
+    `spells?filters[type][$eq]=${element}&populate=*`,
+    "spells",
+  );
+}
+
+export async function GetSpellById(id: string) {
+  return await GetOneStrapiResource<StrapiSpell>(`spells`, id, "spell");
 }

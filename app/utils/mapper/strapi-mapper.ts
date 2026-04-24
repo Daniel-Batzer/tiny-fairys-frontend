@@ -1,11 +1,5 @@
 import type { Fairy, Spell, StrapiFairy, StrapiSpell } from "~/types";
 
-const toImageUrl = (baseUrl: string, path?: string) => {
-  if (!path) return "/images/no-image.png";
-  if (path.startsWith("http")) return path;
-  return `${baseUrl}${path}`;
-};
-
 export const mapStrapiFairyToFairy = (item: StrapiFairy): Fairy => ({
   id: item.id,
   documentId: item.documentId,
@@ -28,10 +22,18 @@ export const mapStrapiSpellToSpell = (item: StrapiSpell): Spell => ({
   description: item.description,
   type: item.type,
   image:
-    item.image?.formats?.medium?.url ??
+    (item.image?.formats?.medium?.url ??
     item.image?.formats?.small?.url ??
     item.image?.url ??
-    "/images/no-image.png",
+    item.type === "fire")
+      ? "/images/elements/fire.png"
+      : item.type === "water"
+        ? "/images/elements/water.png"
+        : item.type === "earth"
+          ? "/images/elements/earth.png"
+          : item.type === "air"
+            ? "/images/elements/air.png"
+            : "/images/no-image.png",
   normal: item.normal,
   expert: item.expert,
   special: item.special,

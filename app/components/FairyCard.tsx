@@ -1,13 +1,9 @@
 import { Link } from "react-router";
 import type { Fairy } from "~/types";
+import { truncateText } from "~/utils/helpers";
 
 type FairyCardProps = {
   fairy: Fairy;
-};
-
-const truncateText = (text: string, maxLength = 120) => {
-  if (!text) return "";
-  return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
 };
 
 const FairyCard = ({ fairy }: FairyCardProps) => {

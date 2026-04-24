@@ -1,8 +1,11 @@
 import type { Fairy, Spell } from "~/types";
 import type { Route } from "./+types/details";
 import { Link } from "react-router";
-import { mapStrapiFairyToFairy } from "~/utils/mapper/strapi-mapper";
-import { GetFairyById } from "~/utils/mapper/strapi-api";
+import {
+  mapStrapiFairyToFairy,
+  mapStrapiSpellToSpell,
+} from "~/utils/mapper/strapi-mapper";
+import { GetFairyById, GetSpellsByElement } from "~/utils/mapper/strapi-api";
 
 type DetailsLoaderData = {
   fairy: Fairy;
@@ -25,7 +28,12 @@ export async function loader({
 
   const fairy = mapStrapiFairyToFairy(strapiFairy);
 
-  return { fairy, spells: [] };
+  const strapiSpells = await GetSpellsByElement(fairy.type);
+  const spells = strapiSpells.map((item) => mapStrapiSpellToSpell(item));
+
+  console.log("Fairy details loader - fairy", fairy);
+  console.log("Spells for fairy type", fairy.type, spells);
+  return { fairy, spells };
 }
 
 const FairyDetailsPage = ({ loaderData }: Route.ComponentProps) => {
@@ -87,26 +95,26 @@ const FairyDetailsPage = ({ loaderData }: Route.ComponentProps) => {
               ))}
             </div>
           </div>
-
-          <div>
-            <h2 className="mb-3 text-xl font-semibold">Spells</h2>
-            <div className="space-y-3">
-              {spells.length > 0 ? (
-                spells.map((spell) => (
-                  <div key={spell.id} className="rounded-lg bg-gray-800 p-4">
-                    <h3 className="font-semibold text-blue-300">
-                      {spell.title}
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-300">
-                      {spell.description}
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-gray-400">Keine Spells vorhanden.</p>
-              )}
-            </div>
-          </div>
+        </div>
+      </div>
+      <div className="mt-4">
+        <h2 className="mb-3 text-xl font-semibold">Spells</h2>
+        <div className="space-y-3 grid gap-4 md:grid-cols-2 lg:grid-cols-3 items-stretch">
+          {spells.length > 0 ? (
+            spells.map((spell) => (
+              <div
+                key={spell.id}
+                className="flex h-full flex-col rounded-lg bg-gray-800 p-4"
+              >
+                <h3 className="font-semibold text-blue-300">{spell.title}</h3>
+                <p className="mt-1 text-sm text-gray-300">
+                  {spell.description}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p className="text-sm text-gray-400">Keine Spells vorhanden.</p>
+          )}
         </div>
       </div>
     </section>
