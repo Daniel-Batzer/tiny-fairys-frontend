@@ -31,8 +31,6 @@ export async function loader({
   const strapiSpells = await GetSpellsByElement(fairy.type);
   const spells = strapiSpells.map((item) => mapStrapiSpellToSpell(item));
 
-  console.log("Fairy details loader - fairy", fairy);
-  console.log("Spells for fairy type", fairy.type, spells);
   return { fairy, spells };
 }
 
